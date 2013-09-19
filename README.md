@@ -28,10 +28,14 @@ Features
 --------
 
 Connection to videos: 
--Image
+
+![ScreenShot](https://raw.github.com/Talrik/studip-casa-plugin/master/doc/images/video.png)
+
 
 Connection to PDFs (here a floor plan):
--Image
+
+![ScreenShot](https://raw.github.com/Talrik/studip-casa-plugin/master/doc/images/raumplan.png)
+
 
 
 
