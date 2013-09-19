@@ -25,5 +25,13 @@ Facebook or whatever you would like. Therefore, services can be connected dynami
 activity and identity of the user. 
 
 Features
+--------
+
+Connection to videos: 
+-Image
+
+Connection to PDFs (here a floor plan):
+-Image
+
 
 
