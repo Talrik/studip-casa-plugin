@@ -18,7 +18,7 @@ There are two ways to use this plugin:
     Without a CASA server the plugin allows only static bindings between services and lectures/locations. 
 Therefore, you will only be able to connect to services which are entered in the Stud.IP system.
 
-*   Connected to a CASA server
+*   Connected to a CASA server (BETA!!!)
 
     By using a CASA server you are able to use also context information from other sources like OpenStreetMap, 
 Facebook or whatever you would like. Therefore, services can be connected dynamically based on location, time, 
