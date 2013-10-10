@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 	
-require 'models/Service.class.php';
+require_once 'models/Service.class.php';
+require_once 'CasaSettings.php';
 	
 class CasaPlugin extends AbstractStudIPStandardPlugin
 {
@@ -37,16 +38,20 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 		$navigation->setDisplayname(_("Dienste"));
 		$navigation->setLinkParam('viewServices');
 		
+		global $perm;
+		$sem = Seminar::GetInstance($GLOBALS['SessSemName'][1]);
+		$sem_id = $sem->id;                               
+		$settings = CasaSettings::getCasaSettings();
+		
+		if ($perm->have_studip_perm($settings['addRole'], $sem_id)) {
+		
 		$subNavigation2 = new PluginNavigation();
 		$subNavigation2->setDisplayname("Dienste hinzufügen");
 		$subNavigation2->setLinkParam('viewAddService');
 		$navigation->addSubMenu($subNavigation2);
+		}
 		
-		global $perm;
-		$sem = Seminar::GetInstance($GLOBALS['SessSemName'][1]);
-		$sem_id = $sem->id;                                // SeminarID
-		                           // SeminarID
-		if ($perm->have_studip_perm('tutor', $sem_id)) {
+		if ($perm->have_studip_perm($settings['admRole'], $sem_id)) {
 		        $subNavigation3 = new PluginNavigation();
                 $subNavigation3->setDisplayname("Dienste verwalten");
                 $subNavigation3->setLinkParam('viewAdministration');
