@@ -1,6 +1,6 @@
 <?php
 $settings = CasaSettings::getCasaSettings();
-var_dump($_REQUEST);
+//var_dump($_REQUEST);
 function getServiceID($service){
 	$entry = $service->properties->entry;
 	for ($i=0; $i<sizeof($entry);$i++){

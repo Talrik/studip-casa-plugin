@@ -61,9 +61,7 @@ $settings = CasaSettings::getCasaSettings();
 </fieldset>
 
 <div class="button-group">
-<!--
-<?= \Studip\Button::createAccept(_("Speichern und aktivieren")) ?>
--->
+
 <?= makeButton('uebernehmen', 'input', false, 'save') ?>
 <?= makeButton('abbrechen', 'input', false, 'cancel') ?>
 </div>

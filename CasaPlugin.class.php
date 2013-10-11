@@ -94,11 +94,11 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
                                 $template->set_attribute('username', $this->getUser()->username);
                                 $template->set_attribute('lecture_id', Request::get('cid'));
                                 $template->set_attribute('service_name', Request::get('service_name'));
-				$template->set_attribute('service_address', Request::get('service_address'));
-				$template->set_attribute('service_description', Request::get('service_description'));
+								$template->set_attribute('service_address', Request::get('service_address'));
+								$template->set_attribute('service_description', Request::get('service_description'));
                                 $template->set_attribute('service_restrictions', Request::get('service_restrictions'));
-				$template->set_attribute('location', Request::get('location'));
-                                echo $template->render();
+								$template->set_attribute('location', Request::get('location'));
+						       echo $template->render();
 		}
                 if (Request::submitted('updateService')){
                 $template_path = $this->getPluginPath().'/templates';
@@ -306,7 +306,7 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 						$roleParts = array();
 						$userRole = explode ( ";" ,$role);
 						foreach ($userRole as $val) {
-						    $roleParts[] = "'%".mysql_real_escape_string($val)."%'";
+						    $roleParts[] = "'%".$val."%'";
 						}
 						$partsString = implode(' OR `userrole` LIKE ', $roleParts);
 				        $query = "SELECT *

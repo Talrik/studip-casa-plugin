@@ -7,6 +7,8 @@
 	
 }
 */
+
+//var_dump($_REQUEST);
 $settings = CasaSettings::getCasaSettings();
 function getServiceID($service){
 	if($settings['useCASA'] == 1){

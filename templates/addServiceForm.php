@@ -1,3 +1,4 @@
+<?php// var_dump($locations);?>
 <form id="edit_box" action="<?= URLHelper::getLink('#save') ?>" method="POST">
     <div style="text-align:center" id="settings" class="steel1">
 		<h2 id="bd_basicsettings" class="steelgraulight">Neuen Dienst eintragen</h2>
@@ -40,8 +41,8 @@
                         <td style="text-align: left" width="80%">    
                                 <select  name="location" style="width: 80%">
                                         <option></option>
-                                        <option value = <?php echo utf8_encode($locations[0]) ?> ><?php echo $locations[0]; ?></option>
-                                        <option value = <?php echo utf8_encode($locations[1]) ?>><?php echo $locations[1]; ?></option>
+                                        <option value ="<?php echo utf8_encode($locations[0]); ?>" ><?php echo $locations[0] ?></option>
+                                        <option value ="<?php echo utf8_encode($locations[1]); ?>" ><?php echo $locations[1] ?></option>
                                 </select>
                         </td>
                 </tr>
