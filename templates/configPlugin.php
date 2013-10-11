@@ -1,7 +1,7 @@
 <?php
 $settings['broker'] = 'http://elbe5.uni-rostock.de:8080/GUI_Broker_StudIP/GUI_Broker_StudIP?WSDL';
 $settings = CasaSettings::getCasaSettings();
-var_dump($settings);
+//var_dump($settings);
 ?>
 
 <h2>CASA-Einstellungen</h2>
@@ -61,7 +61,11 @@ var_dump($settings);
 </fieldset>
 
 <div class="button-group">
+<!--
 <?= \Studip\Button::createAccept(_("Speichern und aktivieren")) ?>
+-->
+<?= makeButton('uebernehmen', 'input', false, 'save') ?>
+<?= makeButton('abbrechen', 'input', false, 'cancel') ?>
 </div>
 </form>
 
