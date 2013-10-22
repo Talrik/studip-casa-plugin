@@ -37,7 +37,7 @@ Connection to PDFs (here a floor plan):
 ![ScreenShot](https://raw.github.com/Talrik/studip-casa-plugin/master/doc/images/raumplan.png)
 
 
-Connection to Websites (here a local traffic plan):
+Connection to websites (here a local traffic plan):
 
 ![ScreenShot](https://raw.github.com/Talrik/studip-casa-plugin/master/doc/images/haltestelle.png)
 
