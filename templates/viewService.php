@@ -1,15 +1,33 @@
 <?php 
-/*
-*
-*	viewService.php - Anzeige der durch CASA bereitgestellten Dienste im Stud.IP
-*
-*/
-//  Beginn der Ausgabe der Dienste
-//var_dump($services);
-//var_dump(Seminar::GetInstance($GLOBALS['SessSemName'][1]));
+
+# Copyright (c)  2013  <philipp.lehsten@gmail.com>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+function getFullUserName($userID){
+$db = DBManager::get();
+$resourceIdSearch = $db->query("SELECT Vorname, Nachname FROM auth_user_md5 WHERE username = '$userID'");
+$fetchedSearched = $resourceIdSearch->fetch();		// Suche sortieren
+return $fetchedSearched[0].' '.$fetchedSearched[1];
+}
 $scount = sizeof($services);
 if ($scount==1 && is_null($services[0])){
-    echo MessageBox::info('Leider sind aktuell keine Dienste mit dieser Veranstaltung oder mit diesem Ort verknüpft', array('Name der Veranstaltung: '.Seminar::GetInstance($GLOBALS['SessSemName'][1])->getName(), 'Orte: '.$locations[0].', '.$locations[1]), true);
+    echo MessageBox::info('Leider sind aktuell keine Dienste mit dieser Veranstaltung oder mit diesem Ort verknüpft', array('Name der Veranstaltung: '.Seminar::GetInstance($GLOBALS['SessSemName'][1])->getName(), 'Orte: '.implode(",",$locations)), true);
 }
 else{
     echo'
@@ -47,7 +65,9 @@ else{
             <tr><td class="topic" colspan="2">
             <img src="./../../assets/images/icons/16/white/admin.png" border="0" alt="Dienste"  title="Dienste">
         ';
-        echo'   <b>'._($services[$i]->title).'</b>';
+		$userName = getFullUserName($services[$i]->provider); 
+		$userLink = URLHelper::getLink('about.php?username='.$services[$i]->provider);
+	   echo'   <b>'._($services[$i]->title).'</b> - <small>geteilt von <a href='._($userLink).' >'._($userName).'</a></small>';
         echo'
             </td></tr>
             <tr><td class="steel1" colspan="3">

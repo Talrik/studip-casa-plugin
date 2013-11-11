@@ -72,7 +72,7 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
                 $this->factory = new Flexi_TemplateFactory($template_path);
                 $template = $this->factory->open('addServiceForm');
                 $template->set_attribute('scount', 1);
-		$template->set_attribute('locations', $this->getLocations());
+		$template->set_attribute('locations', $this->getAllLocations());
                 $template->set_attribute('serviceurl', $url);
                 $template->set_attribute('servicetitle', $title);
                 echo $template->render();
@@ -168,7 +168,7 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 			case('viewDisclaimer'):
                                 $template_path = $this->getPluginPath().'/templates';
                                 $this->factory = new Flexi_TemplateFactory($template_path);
-                                $template = $this->factory->open('test');
+                                $template = $this->factory->open('hilfe');
                                 echo $template->render();
 				break;
 			default: 
@@ -178,7 +178,7 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
                                 $this->factory = new Flexi_TemplateFactory($template_path);
                                 $template = $this->factory->open('viewService');
 				$services = $this->getServices();
-				$locations = $this->getLocations();
+				$locations = $this->getNextLocations();
 				$template->set_attribute('settings', CasaSettings::getCasaSettings());
 				$template->set_attribute('services', $services);
 				$template->set_attribute('locations', $locations);
@@ -333,11 +333,47 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 				}
 			}
 
-	function getLocations(){
+	function getNextLocations(){
   		$sem = Seminar::GetInstance($GLOBALS['SessSemName'][1]);
 		$uniqueSemId = $sem->id;                                // SeminarID
 		$nextDateDB = SeminarDB::getNextDate($uniqueSemId);     // naechster Termin vom Se$
-                $uniqueDateId = $nextDateDB['termin'][0];               // ID vom naechsten Termin
+                $uniqueDateId = $nextDateDB['termin'][0];       // ID vom naechsten Termin
+                //  RaumID für den Fall das kein zukünftiger Termin existiert
+                if (is_null($uniqueDateId)){
+                //  RaumID für den ersten Termin ermitteln
+              		$firstDateDB = SeminarDB::getFirstDate($uniqueSemId);
+                	$uniqueDateId = $firstDateDB[0];
+               	}
+                //  Wenn kein Raum genutzt wird entfaellt die ortsbezogene Suche
+                if (is_null($uniqueDateId)){
+                	$locationName = NULL;
+                	$roomName = NULL;
+                }
+                //  Ermitteln der Klarnamen des Raumes und des Gebaeudes
+                        else{
+                                $db = DBManager::get();
+                                //  Suche nach der RaumID
+                                $resourceIdSearch = $db->query("SELECT resource_id FROM resources_assign WHERE assign_user_id = '$uniqueDateId'");
+                                $fetchedSearched = $resourceIdSearch->fetch();          // Suche sortieren
+                                $uniqueResourceId = $fetchedSearched[0];                // RaumID des Termins
+                                //  Suche nach der GebaeudeID
+                                $parentIdSearch = $db->query("SELECT `parent_id` FROM `resources_objects` WHERE `resource_id` = '$uniqueResourceId'");
+                                $fetchedSearched = $parentIdSearch->fetch();            // Suche sortieren
+                                $parentId = $fetchedSearched[0];                        // GebauedeID
+                                //  Suche der Klarnamen
+                                $nameSearch = $db->query("SELECT `name` FROM `resources_objects` WHERE `resource_id` = '$parentId' OR `resource_id` = '$uniqueResourceId'");
+                                $fetchedSearched = $nameSearch->fetch();
+                                $roomName =  $fetchedSearched[0];                       // Raumname
+                                $fetchedSearched = $nameSearch->fetch();
+                                $locationName =  $fetchedSearched[0];                   // Gebaeudename
+                        }
+		return array($locationName, $roomName);
+	}
+	function getAllLocations(){
+  		$sem = Seminar::GetInstance($GLOBALS['SessSemName'][1]);
+		$uniqueSemId = $sem->id;                                // SeminarID
+		$nextDateDB = SeminarDB::getNextDate($uniqueSemId);     // naechster Termin vom Se$
+                $uniqueDateId = $nextDateDB['termin'][0];       // ID vom naechsten Termin
                 //  RaumID für den Fall das kein zukünftiger Termin existiert
                 if (is_null($uniqueDateId)){
                 //  RaumID für den ersten Termin ermitteln

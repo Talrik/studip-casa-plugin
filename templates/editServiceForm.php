@@ -1,3 +1,28 @@
+<?php
+
+# Copyright (c)  2013  <philipp.lehsten@gmail.com>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+	
+?>
+
+
 <script type="text/javascript" language="javascript">
 function modify(form, checked, field){
 if(checked){
@@ -10,7 +35,7 @@ else{
 }
 }
 </script>        
-<?php $locations = CasaPlugin::getLocations(); ?>
+<?php $locations = CasaPlugin::getAllLocations(); ?>
 <!-- ><?php var_dump($_REQUEST);?> -->
 <form id="edit_box" action="<?= URLHelper::getLink('#save') ?>" method="POST">
     <div style="text-align:center" id="settings" class="steel1">
@@ -33,7 +58,7 @@ else{
 			 
 			</td>
              		<td style="text-align: left" width="80%">  <input type="checkbox" onClick="modify(this.form, this.checked, 'service_address');">   
-						<input  type="text" pattern="^http://(.*)" name="service_address" value="<?= htmlReady($service_address) ?>" style="width: 80%; color:gray" disabled=true>
+						<input  type="text" pattern="(^http://(.*)|^https://(.*))" name="service_address" value="<?= htmlReady($service_address) ?>" style="width: 80%; color:gray" disabled=true>
                        
 			</td>
           	</tr>
