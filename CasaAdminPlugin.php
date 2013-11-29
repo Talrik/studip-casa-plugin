@@ -92,7 +92,7 @@ class CasaAdminPlugin extends StudipPlugin implements SystemPlugin
 	/**
 	* Check the new settings and store them 
 	*/
-    private function settings_action()
+    function settings_action()
     {
         $this->requireRoot();
 
