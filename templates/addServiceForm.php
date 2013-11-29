@@ -1,24 +1,34 @@
 <?php
-# Copyright (c)  2013  <philipp.lehsten@gmail.com>
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-// var_dump($locations);
+/**
+ * This file views the interface to add services. The form is processed by thy plugin using the function actionSaveService() 
+ *
+ * Copyright (c)  2013  <philipp.lehsten@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * @category   StudIP_Plugin
+ * @package    de.lehsten.casa.studip.plugin
+ * @author     Philipp Lehsten <philipp.lehsten@uni-rostock.de>
+ * @copyright  2013 Philipp Lehsten <philipp.lehsten@uni-rostock.de>
+ * @since      File available since Release 1.0
+ */
+
 ?>
 
 <form id="edit_box" action="<?= URLHelper::getLink('#save') ?>" method="POST">
@@ -63,8 +73,11 @@
                         <td style="text-align: left" width="80%">    
                                 <select  name="location" style="width: 80%">
                                         <option></option>
-                                        <option value ="<?php echo utf8_encode($locations[0]); ?>" ><?php echo $locations[0] ?></option>
-                                        <option value ="<?php echo utf8_encode($locations[1]); ?>" ><?php echo $locations[1] ?></option>
+										<?php 
+										foreach($locations as $val){
+											echo '<option value ="'.utf8_encode($val).'">'._($val).'</option>';
+										}
+										?> 
                                 </select>
                         </td>
                 </tr>

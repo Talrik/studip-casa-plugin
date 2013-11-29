@@ -1,30 +1,46 @@
 <?php 
+/**
+ * This file contains the interface to view services
+ *
+ * Copyright (c)  2013  <philipp.lehsten@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * @category   StudIP_Plugin
+ * @package    de.lehsten.casa.studip.plugin
+ * @author     Philipp Lehsten <philipp.lehsten@uni-rostock.de>
+ * @copyright  2013 Philipp Lehsten <philipp.lehsten@uni-rostock.de>
+ * @since      File available since Release 1.0
+ */
 
-# Copyright (c)  2013  <philipp.lehsten@gmail.com>
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+ /**
+ * returns the full name (first name + last name) of the user for the user name
+ * @param string $userID user name in the studip system
+ */
 function getFullUserName($userID){
 $db = DBManager::get();
 $resourceIdSearch = $db->query("SELECT Vorname, Nachname FROM auth_user_md5 WHERE username = '$userID'");
 $fetchedSearched = $resourceIdSearch->fetch();		// Suche sortieren
 return $fetchedSearched[0].' '.$fetchedSearched[1];
 }
+
+// if there are no services - view an info box
 $scount = sizeof($services);
 if ($scount==1 && is_null($services[0])){
     echo MessageBox::info('Leider sind aktuell keine Dienste mit dieser Veranstaltung oder mit diesem Ort verknüpft', array('Name der Veranstaltung: '.Seminar::GetInstance($GLOBALS['SessSemName'][1])->getName(), 'Orte: '.implode(",",$locations)), true);
@@ -34,13 +50,13 @@ else{
 	<script type="text/javascript">
 	links = new Array('.sizeof($serviceurl).');
     ';
-    //  links[] wird mit den URLs gefüllt
+    //  we need an array with the urls
     if (sizeof($services)>=1){
         for ($z =0; $z<sizeof($services); $z++){
 	echo 'links['._($z).']="'._($services[$z]->targetURL).'";';
         }
     }
-    //  Definition der in JavaScript verwendeten Funktion
+    //  java script function for the toggeling
     echo'
         function toggle(control){
             var elem = document.getElementById("block"+control);
@@ -59,7 +75,7 @@ else{
         </script>
         <table class="index_box"  style="width: 100%;">
     ';
-    //  Ausgabe der Dienstnamen in eigenen Zeilen mit Text zum Anzeigen und im neuen Fenster oeffnen
+    //  view the services
     for ($i = 0; $i < $scount; $i++){
         echo'
             <tr><td class="topic" colspan="2">

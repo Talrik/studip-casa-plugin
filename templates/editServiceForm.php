@@ -1,28 +1,39 @@
 <?php
+/**
+ * This file contains the form for editing services
+ *
+ * Copyright (c)  2013  <philipp.lehsten@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * @category   StudIP_Plugin
+ * @package    de.lehsten.casa.studip.plugin
+ * @author     Philipp Lehsten <philipp.lehsten@uni-rostock.de>
+ * @copyright  2013 Philipp Lehsten <philipp.lehsten@uni-rostock.de>
+ * @since      File available since Release 1.0
+ */
 
-# Copyright (c)  2013  <philipp.lehsten@gmail.com>
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-	
+
+/**
+* function to disable the unused fields
+*/	
 ?>
-
-
 <script type="text/javascript" language="javascript">
 function modify(form, checked, field){
 if(checked){
@@ -36,7 +47,6 @@ else{
 }
 </script>        
 <?php $locations = CasaPlugin::getAllLocations(); ?>
-<!-- ><?php var_dump($_REQUEST);?> -->
 <form id="edit_box" action="<?= URLHelper::getLink('#save') ?>" method="POST">
     <div style="text-align:center" id="settings" class="steel1">
 		<h2 id="bd_basicsettings" class="steelgraulight">Dienst bearbeiten</h2>
@@ -112,21 +122,17 @@ else{
 						};
 					?>
   					value=" "></option>
-           				<option 
 					<?php
-						if ($_REQUEST["location"] == $locations[0]){
+					$i=0;
+					while(sizeof($locations) >$i){
+           				echo'<option '; 
+						if ($_REQUEST["location"] === $locations[$i]){
 							echo ' selected=true ';
 						};
-					?>
-  					value="<? echo htmlready($locations[0])?>"><? echo htmlready($locations[0])?></option>
-       				<option 
-				<?php
-					if ($_REQUEST["location"] == $locations[1]){
-						echo ' selected=true ';
-					};
-				?>
-				value="<? echo htmlready($locations[1])?>"><? echo htmlready($locations[1])?></option>
-           			
+						echo ' value="'._(htmlready($locations[$i])).'">'._(htmlready($locations[$i])).'</option>';
+						$i++;
+					}
+					?>	
         			</select>
                         
 

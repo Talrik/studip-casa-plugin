@@ -1,13 +1,39 @@
 <?php 
-/*
-*
-*	broker4gui.php - Anzeige der durch den Broker4GUI bereitgestellten Dienste im Stud.IP
-*
-*/
-//  Beginn der Ausgabe der Dienste
-//var_dump($services);
-//echo PluginEngine::getURL("CasaPlugin",array(),"show",false);
-
+/**
+ * This file views the administration interface for users to handle existing services
+ *
+ * Copyright (c)  2013  <philipp.lehsten@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * @category   StudIP_Plugin
+ * @package    de.lehsten.casa.studip.plugin
+ * @author     Philipp Lehsten <philipp.lehsten@uni-rostock.de>
+ * @copyright  2013 Philipp Lehsten <philipp.lehsten@uni-rostock.de>
+ * @since      File available since Release 1.0
+ */
+	
+/**
+ * returns the serviceID of a given service
+ * @param Service $service Service to retrieve the ID from
+ * @return string serviceID or NULL if there is none
+ */
 function getServiceID($service){
 	if ($service->serviceID != NULL){
 		return $service->serviceID;
@@ -20,10 +46,13 @@ function getServiceID($service){
 	}
 }
 }
+
+// view message box if there are no services
 $scount = sizeof($services);
 if ($scount == 1 && is_null($services[0])){
     echo MessageBox::info('Leider sind aktuell keine Dienste mit dieser Veranstaltung oder mit diesem Ort verknüpft');
 }
+// else view services
 else{
 
 
@@ -32,13 +61,13 @@ else{
 	<script type="text/javascript">
 	links = new Array('.sizeof($serviceurl).');
     ';
-    //  links[] wird mit den URLs gefüllt
+    //  array for the urls
        if (sizeof($services)>=1){
         for ($z =0; $z<sizeof($services); $z++){
         echo 'links['._($z).']="'._($services[$z]->targetURL).'";';
         }
     }
-    //  Definition der in JavaScript verwendeten Funktion
+    //  toggle function in java script
     echo'
         function toggle(control){
             var elem = document.getElementById("block"+control);
@@ -59,7 +88,7 @@ else{
 	}
     //
         </script>';
-		
+// view the services in the table		
 echo '<div style="text-align:center" id="settings" class="steel1">
 		<h2 id="bd_basicsettings" class="steelgraulight">Dienste zu dieser Veranstaltung und diesem Ort</h2></div><table><tr>';
         printf("<td class=\"steel\" width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Titel"));
@@ -84,8 +113,7 @@ if (is_array($services[$i]->restrictions)){
 else{ 
 echo $services[$i]->restrictions;
 }
-//    for ($j = 0; $i<sizeof($services[i]->restrictions);$j++){echo $services[$i]->restrictions[$j];}
-    echo '</font></td>';
+   echo '</font></td>';
     printf("<td class=\"steel\" width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">
 		<a  href=\"javascript:toggle(%s)\">
 			<img id=\"klappenImg\" src=\"./../../assets/images/icons/16/black/search.png\" alt=\"Objekt aufklappen\">
@@ -131,9 +159,8 @@ if (is_array($services[$i]->restrictions)){
 
 }
 echo"</tr></table>";    
-
+// view services one below the other
 echo '<table class="index_box"  style="width: 100%;">';
-    //  Ausgabe der Dienstnamen in eigenen Zeilen mit Text zum Anzeigen und im neuen Fenster oeffnen
     for ($i = 0; $i < $scount; $i++){
         echo'
             <tr><td class="topic" colspan="2">

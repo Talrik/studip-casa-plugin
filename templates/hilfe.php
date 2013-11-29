@@ -1,3 +1,70 @@
+<?php
+/**
+ * This file contains help page for the plugin including the disclaimer 
+ *
+ * Copyright (c)  2013  <philipp.lehsten@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * @category   StudIP_Plugin
+ * @package    de.lehsten.casa.studip.plugin
+ * @author     Philipp Lehsten <philipp.lehsten@uni-rostock.de>
+ * @copyright  2013 Philipp Lehsten <philipp.lehsten@uni-rostock.de>
+ * @since      File available since Release 1.0
+ */
+
+// define the location for the manual and help sites and use them as services
+$manual = URLHelper::getURL('plugins_packages/PhilippLehsten/CasaPlugin/static/manual/assets/fallback/index.html');
+$examples = URLHelper::getURL('plugins_packages/PhilippLehsten/CasaPlugin/static/examples/assets/fallback/index.html');
+$services[0]->title = 'Anleitung';
+$services[0]->targetURL = $examples;
+$services[1]->title = 'Beispiele';
+$services[1]->targetURL = $manual;
+$scount = count($services);
+
+// create the array for the urls
+echo '<script type="text/javascript">';
+echo 'var links = new Array("';
+echo $manual;
+echo '","';
+echo $examples;
+echo '");'; 
+// toggle function
+echo 'function toggle(control){
+    var elem = document.getElementById("block"+control);
+    if(elem.style.display == "none"){
+        document.getElementById("klappen"+control).childNodes[2].nodeValue = "ausblenden";
+        document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgraurunt2.png";
+        elem.style.display = "block";
+        elem.src = links[control];
+    }
+    else{
+        elem.style.display = "none";
+        document.getElementById("klappen"+control).childNodes[2].nodeValue = "anzeigen";
+        document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgrau2.png";
+    }
+}';
+echo '</script>';
+
+?> 
+
+
 <h2 id="bd_basicsettings" class="steelgraulight">Das CASA-Plugin f&uuml;r Stud.IP</h2>
 <h3>Hinweise zur Nutzung</h3>
 <b>Allgemeines: </b></br>
@@ -15,42 +82,13 @@ Mit Fragen, Hinweisen und Problemen wenden Sie sich bitte an: <br>
 <b>
 philipp.lehsten@uni-rostock.de </br>
 studip-support@uni-rostock.de</b></br></br>
-<script type="text/javascript">
-<?php 
-$manual = URLHelper::getURL('plugins_packages/PhilippLehsten/CasaPlugin/static/manual/assets/fallback/index.html');
-$examples = URLHelper::getURL('plugins_packages/PhilippLehsten/CasaPlugin/static/examples/assets/fallback/index.html');
-$services[0]->title = 'Anleitung';
-$services[0]->targetURL = $examples;
-$services[1]->title = 'Beispiele';
-$services[1]->targetURL = $manual;
-$scount = count($services);
-echo 'var links = new Array("';
-echo $manual;
-echo '","';
-echo $examples;
-echo '");'; ?>
 
-
-    function toggle(control){
-        var elem = document.getElementById("block"+control);
-        if(elem.style.display == "none"){
-            document.getElementById("klappen"+control).childNodes[2].nodeValue = "ausblenden";
-            document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgraurunt2.png";
-            elem.style.display = "block";
-            elem.src = links[control];
-        }
-        else{
-            elem.style.display = "none";
-            document.getElementById("klappen"+control).childNodes[2].nodeValue = "anzeigen";
-            document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgrau2.png";
-        }
-    }
-    </script>
     <table class="index_box"  style="width: 100%;">
 
 </script>
     <table class="index_box"  style="width: 100%;">
 <?php
+// view the manual and the examples as services
 for ($i = 0; $i < $scount; $i++){
     echo'
         <tr><td class="topic" colspan="2">
