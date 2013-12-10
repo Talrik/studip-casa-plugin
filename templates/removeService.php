@@ -56,5 +56,6 @@ WHERE `serviceID` = :service_id ";
         $statement = DBManager::get()->prepare($query);
         $statement->bindValue(':service_id', Request::get("service_id"));
         $statement->execute();
+log_event("CASA_SERVICE_REMOVED",Request::get("service_id"),'','');
 
 ?>

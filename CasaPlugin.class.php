@@ -46,6 +46,11 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 	*/	
 	function __construct() {
 
+		if(Request::get('request')!= NULL){
+			log_event("CASA_SERVICE_USED",Request::get("ID"),'','');
+			exit();
+		}
+		
 		parent::__construct();
 
 

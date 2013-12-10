@@ -30,6 +30,7 @@
  */
 	
 $settings = CasaSettings::getCasaSettings();
+$oldService = createOldService();
 
 /**
  * retrieve or create the service ID from a given service
@@ -54,24 +55,31 @@ function getServiceID($service){
 }
 
 /**
+ * returns the old service which is already in the data base
+ * @return Service new service
+ */
+function createOldService(){
+	// get the old one from the data base by its ID	and store it in $oldService
+	$query = "SELECT *
+	FROM `casa_services`
+	WHERE (`serviceID` = :oldServiceID)";
+	$statement = DBManager::get()->prepare($query); 
+	$statement->bindValue(':oldServiceID', Request::get("service_id"));
+	$statement->execute();
+	$result = $statement->fetch(PDO::FETCH_ASSOC);
+	$oldService = Service::createFromDBEntry($result);
+	return $oldService;
+}
+
+/**
  * creates the new service by getting the old one and comparing both - the new 
  * one so gets all the changes without submitting the unchaged values
  * @return Service new service
  */
 function createNewService(){
-	
-// get the old one from the data base by its ID	and store it in $oldService
-$query = "SELECT *
-FROM `casa_services`
-WHERE (`serviceID` = :oldServiceID)";
-$statement = DBManager::get()->prepare($query); 
-$statement->bindValue(':oldServiceID', Request::get("service_id"));
-$statement->execute();
-$result = $statement->fetch(PDO::FETCH_ASSOC);
-$oldService = Service::createFromDBEntry($result);
-
+	$oldService = createOldService();
 // compare the old service with the values from the Request - if they are different store the ones from the Request
-if(strlen(Request::get("service_name"))!= 0){
+if(strlen(Request::get("service_name"))!= 0 && !is_null(Request::get("service_name"))){
 	$title=Request::get("service_name");
 }else{
 	$title=$oldService->title;
@@ -94,7 +102,11 @@ if(strlen(Request::get("location"))!= 0 && !is_null(Request::get("location"))){
 if(strlen(Request::get("service_restrictions"))!= 0 && !is_null(Request::get("service_restrictions"))){
 	$restriction=Request::get("service_restrictions");
 }else{
-	$restriction=implode(";",$oldService->restrictions);	
+	if(is_array($oldService->restrictions)){
+		$restriction=implode(";",$oldService->restrictions);	
+	}else{
+		$restriction=$oldService->restrictions;
+	}
 }
 // create the new service
 $newService = Service::createFromValues($title,
@@ -176,6 +188,9 @@ else{
        $statement->execute();
 	
 	echo MessageBox::success('Dienst erfolgreich geändert', array('Der Dienst' . $ParamList->title . ' wurde erfolgreich geändert.'), true);
+(is_array($newService->restrictions)  ? $newRestriction = implode(";",$newService->restrictions) : $newRestriction = $newService->restrictions);
+(is_array($oldService->restrictions)  ? $oldRestriction = implode(";",$oldService->restrictions) : $oldRestriction = $oldService->restrictions);
+		log_event("CASA_SERVICE_CHANGED",getServiceID($array),'','NEU: '.$newService->title.', '.$newService->description.', '.$username.', '.$newRestriction.', '.$newService->targetURL.', '.getServiceID($array).', '.$newService->location.' ALT: '.$oldService->title.', '.$oldService->description.', '.$username.', '.$oldRestriction.', '.$oldService->targetURL.', '.Request::get("service_id").', '.$oldService->location);
 }
 }
 // if the casa server is not used only update the service in the data base
@@ -206,5 +221,9 @@ else{
        $statement->execute();
 	
 	echo MessageBox::success('Dienst erfolgreich geändert', array('Der Dienst' . $ParamList->title . ' wurde erfolgreich geändert.'), true);
+	(is_array($newService->restrictions)  ? $newRestriction = implode(";",$newService->restrictions) : $newRestriction = $newService->restrictions);
+	(is_array($oldService->restrictions)  ? $oldRestriction = implode(";",$oldService->restrictions) : $oldRestriction = $oldService->restrictions);
+		
+	log_event("CASA_SERVICE_CHANGED",$newService->serviceID,'','NEU: '.$newService->title.', '.$newService->description.', '.$username.', '.$newRestriction.', '.$newService->targetURL.', '.$newService->serviceID.', '.$newService->location.' ALT: '.$oldService->title.', '.$oldService->description.', '.$username.', '.$oldRestriction.', '.$oldService->targetURL.', '.$oldService->serviceID.', '.$oldService->location);
 }
 ?>

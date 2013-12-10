@@ -53,19 +53,22 @@ else{
     //  we need an array with the urls
     if (sizeof($services)>=1){
         for ($z =0; $z<sizeof($services); $z++){
-	echo 'links['._($z).']="'._($services[$z]->targetURL).'";';
+	echo 'links['._($z).']= new Object();';		
+	echo 'links['._($z).']["URL"]="'._($services[$z]->targetURL).'";';
+	echo 'links['._($z).']["ID"]="'._($services[$z]->serviceID).'";';
         }
     }
     //  java script function for the toggeling
     echo'
-        function toggle(control){
+		function toggle(control){
             var elem = document.getElementById("block"+control);
             if(elem.style.display == "none"){
                 document.getElementById("klappen"+control).childNodes[2].nodeValue = "ausblenden";
                 document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgraurunt2.png";
                 elem.style.display = "block";
-                elem.src = links[control];
-            }
+                elem.src = links[control]["URL"];
+				$.post( "'.PluginEngine::getURL('CasaPlugin').'", { request: "viewService", ID: links[control]["ID"] } );
+				}
             else{
                 elem.style.display = "none";
                 document.getElementById("klappen"+control).childNodes[2].nodeValue = "anzeigen";

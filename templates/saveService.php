@@ -107,4 +107,9 @@ else{
 		'URL: '.$ParamList[url], 
 		'Beschreibung: '.$ParamList[description],
 		), true);
+if ($location != NULL) {		
+	log_event("CASA_LOCATION_SERVICE_CREATED",$service->serviceID,utf8_decode($location),$service_name.', 		'.$service_description.', '.$username.', '.$service_restrictions.', '.$service_address.', 			'.$serviceID.', 	'.$lecture_id.', '.utf8_decode($location));
+}else{
+	log_event("CASA_COURSE_SERVICE_CREATED",$service->serviceID,$lecture_id,$service_name.', 		'.$service_description.', '.$username.', '.$service_restrictions.', '.$service_address.', 		'.$serviceID.', '.$lecture_id.', '.utf8_decode($location));
+}		
 ?>
