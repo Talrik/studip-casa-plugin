@@ -80,13 +80,7 @@ else{
              		<td style="text-align: left" width="80%">
 						 <input type="checkbox" onClick="modify(this.form, this.checked, 'service_restrictions');">
 				<select  name="service_restrictions" style="width: 80%; color:gray" disabled=true>
-            				<option 
-					<?php
-						if (in_array("autor",$_REQUEST["service_restrictions"]) && !in_array("dozent", $_REQUEST["service_restrictions"])){
-							echo ' selected=true ';
-						};
-					?>
-  					value="autor">Studenten</option>
+
            				<option 
 					<?php
 						if (in_array("dozent",$_REQUEST["service_restrictions"]) && !in_array("autor", $_REQUEST["service_restrictions"])){

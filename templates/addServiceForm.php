@@ -58,7 +58,6 @@
 			</td>
              		<td style="text-align: left" width="80%">
 				<select  name="service_restrictions" style="width: 80%">
-            				<option value="autor">Studenten</option>
            				<option value="dozent" selected>Dozenten</option>
             				<option value="autor;dozent">Studenten und Dozenten</option>
         			</select>
