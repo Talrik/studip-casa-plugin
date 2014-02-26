@@ -47,6 +47,17 @@ function getServiceID($service){
 }
 }
 
+ /**
+ * returns the full name (first name + last name) of the user for the user name
+ * @param string $userID user name in the studip system
+ */
+function getFullUserName($userID){
+$db = DBManager::get();
+$resourceIdSearch = $db->query("SELECT Vorname, Nachname FROM auth_user_md5 WHERE username = '$userID'");
+$fetchedSearched = $resourceIdSearch->fetch();		// Suche sortieren
+return $fetchedSearched[0].' '.$fetchedSearched[1];
+}
+
 // view message box if there are no services
 $scount = sizeof($services);
 if ($scount == 1 && is_null($services[0])){
@@ -69,42 +80,39 @@ else{
     }
     //  toggle function in java script
     echo'
-        function toggle(control){
+		function toggle(control){
             var elem = document.getElementById("block"+control);
             if(elem.style.display == "none"){
-                document.getElementById("klappen"+control).childNodes[2].nodeValue = "ausblenden";
-                document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgraurunt2.png";
+                document.getElementById("klappentext"+control).childNodes[0].nodeValue = "ausblenden";
+				  document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgraurunt2.png";
                 elem.style.display = "block";
-                elem.src = links[control];
-            }
+		        elem.src = links[control];
+				}
             else{
                 elem.style.display = "none";
-                document.getElementById("klappen"+control).childNodes[2].nodeValue = "anzeigen";
+                document.getElementById("klappentext"+control).childNodes[0].nodeValue = "anzeigen";
                 document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgrau2.png";
             }
         }
-	function viewEdit(control){
-	
-	}
-    //
-        </script>';
+        </script>
+';
 // view the services in the table		
 echo '<div style="text-align:center" id="settings" class="steel1">
-		<h2 id="bd_basicsettings" class="steelgraulight">Dienste zu dieser Veranstaltung und diesem Ort</h2></div><table><tr>';
-        printf("<td class=\"steel\" width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Titel"));
-    printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Autor"));
-    printf("<td class=\"steel\" width=\"50%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Beschreibung"));
-    printf("<td class=\"steel\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("URL"));
-    printf("<td class=\"steel\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Beschränkung"));
-    printf("<td class=\"steel\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Aktion"));
+		<h2 id="bd_basicsettings" class="steelgraulight">Dienste zu dieser Veranstaltung und diesem Ort</h2></div><table class="zebra-hover"><tr>';
+        printf("<td class=\"blue_gradient\" width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Titel"));
+    printf("<td class=\"blue_gradient\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Autor"));
+    printf("<td class=\"blue_gradient\" width=\"50%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Beschreibung"));
+    printf("<td class=\"blue_gradient\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("URL"));
+    printf("<td class=\"blue_gradient\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Beschränkung"));
+    printf("<td class=\"blue_gradient\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Aktion"));
 echo"</tr>";
 for ($i=0;$i < $scount;$i++ ){
 echo"<tr>";
-    printf("<td class=\"steel\" width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">%s</font></td>", _($services[$i]->title));
-    printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">%s</font></td>", _($services[$i]->provider));
-    printf("<td class=\"steel\" width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">%s</font></td>", _($services[$i]->description));
-    printf("<td class=\"steel\" width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">%s</font></td>", _($services[$i]->targetURL));
-    echo   '<td class="steel" width="30%" align="center" valign="bottom"><font size="-1">';
+    printf("<td  width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">%s</font></td>", _($services[$i]->title));
+    printf("<td  width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">%s</font></td>", _($services[$i]->provider));
+    printf("<td  width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">%s</font></td>", _($services[$i]->description));
+    printf("<td  width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">%s</font></td>", _($services[$i]->targetURL));
+    echo   '<td  width="30%" align="center" valign="bottom"><font size="-1">';
 if (is_array($services[$i]->restrictions)){ 
        foreach($services[$i]->restrictions as $value){
                 echo $value."\n";
@@ -114,7 +122,7 @@ else{
 echo $services[$i]->restrictions;
 }
    echo '</font></td>';
-    printf("<td class=\"steel\" width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">
+    printf("<td width=\"30%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">
 		<a  href=\"javascript:toggle(%s)\">
 			<img id=\"klappenImg\" src=\"./../../assets/images/icons/16/black/search.png\" alt=\"Objekt aufklappen\">
 		</a>",_($i));
@@ -160,22 +168,28 @@ if (is_array($services[$i]->restrictions)){
 }
 echo"</tr></table>";    
 // view services one below the other
-echo '<table class="index_box"  style="width: 100%;">';
+echo ' <table class="zebra-hover"  style="width: 100%;">
+    ';
+    //  view the services
     for ($i = 0; $i < $scount; $i++){
         echo'
-            <tr><td class="topic" colspan="2">
+            <tr><td class="blue_gradient" colspan="3">
             <img src="./../../assets/images/icons/16/white/admin.png" border="0" alt="Dienste"  title="Dienste">
         ';
-        echo'   <b>'._($services[$i]->title).'</b>';
+		$userName = getFullUserName($services[$i]->provider); 
+		$userLink = URLHelper::getLink('about.php?username='.$services[$i]->provider);
+	   echo'   <b>'._($services[$i]->title).'</b> - <small>geteilt von <a href='._($userLink).' >'._($userName).'</a></small>';
         echo'
             </td></tr>
-            <tr><td class="steel1" colspan="3">
+            <tr><td width="16">
             <a id="klappen'._($i).'" href="javascript:toggle('._($i).')">
             <img id="klappenImg'._($i).'" src="./../../assets/images/forumgrau2.png" alt="Objekt aufklappen">
-                anzeigen</a> / 
+                </a></td>	
         ';
-            echo '<a href="'._(urldecode($services[$i]->targetURL)).'" target="_blank">Neu &ouml;ffnen</a>';
-        echo'
+        echo '<td width="150"><a id="klappen'._($i).'" href="javascript:toggle('._($i).')"><span id="klappentext'._($i).'">anzeigen</span></a> / <a 					href="'._(urldecode($services[$i]->targetURL)).'" target="_blank">Neu &ouml;ffnen</a>';
+		echo '<td>'._($services[$i]->description).'</td></tr>';
+
+		echo'<tr><td colspan="3">
             <br /><iframe id="block'._($i).'" style="display: none" src="" width="98%" height="500" name="'._("Dienste").'" frameborder="0">
             <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen:
             Sie k&ouml;nnen die eingebettete Seite &uuml;ber den folgenden Verweis
@@ -186,8 +200,6 @@ echo '<table class="index_box"  style="width: 100%;">';
         ';
     };
     echo'
-        <script type="text/javascript">
-        </script>
         </tr></td></table>
     ';
 }

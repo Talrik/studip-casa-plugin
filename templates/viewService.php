@@ -63,25 +63,27 @@ else{
 		function toggle(control){
             var elem = document.getElementById("block"+control);
             if(elem.style.display == "none"){
-                document.getElementById("klappen"+control).childNodes[2].nodeValue = "ausblenden";
-                document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgraurunt2.png";
+                document.getElementById("klappentext"+control).childNodes[0].nodeValue = "ausblenden";
+				  document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgraurunt2.png";
                 elem.style.display = "block";
                 elem.src = links[control]["URL"];
-				$.post( "'.PluginEngine::getURL('CasaPlugin').'", { request: "viewService", ID: links[control]["ID"] } );
+              	$.post( "'.PluginEngine::getURL('CasaPlugin').'", { request: "viewService", ID: links[control]["ID"] } );
+				alert(elem.src);
+				parent.frames["block"+control].window.location.reload();
 				}
             else{
                 elem.style.display = "none";
-                document.getElementById("klappen"+control).childNodes[2].nodeValue = "anzeigen";
+                document.getElementById("klappentext"+control).childNodes[0].nodeValue = "anzeigen";
                 document.getElementById("klappenImg"+control).src = "./../../assets/images/forumgrau2.png";
             }
         }
         </script>
-        <table class="index_box"  style="width: 100%;">
+        <table class="zebra"  style="width: 100%;">
     ';
     //  view the services
     for ($i = 0; $i < $scount; $i++){
         echo'
-            <tr><td class="topic" colspan="2">
+            <tr><td class="blue_gradient" colspan="3">
             <img src="./../../assets/images/icons/16/white/admin.png" border="0" alt="Dienste"  title="Dienste">
         ';
 		$userName = getFullUserName($services[$i]->provider); 
@@ -89,13 +91,15 @@ else{
 	   echo'   <b>'._($services[$i]->title).'</b> - <small>geteilt von <a href='._($userLink).' >'._($userName).'</a></small>';
         echo'
             </td></tr>
-            <tr><td class="steel1" colspan="3">
+            <tr><td width="16">
             <a id="klappen'._($i).'" href="javascript:toggle('._($i).')">
             <img id="klappenImg'._($i).'" src="./../../assets/images/forumgrau2.png" alt="Objekt aufklappen">
-                anzeigen</a> / 
+                </a></td>	
         ';
-        echo '<a href="'._(urldecode($services[$i]->targetURL)).'" target="_blank">Neu &ouml;ffnen</a>';
-        echo'
+        echo '<td width="150"><a id="klappen'._($i).'" href="javascript:toggle('._($i).')"><span id="klappentext'._($i).'">anzeigen</span></a> / <a 					href="'._(urldecode($services[$i]->targetURL)).'" target="_blank">Neu &ouml;ffnen</a>';
+		echo '<td>'._($services[$i]->description).'</td></tr>';
+
+		echo'<tr><td colspan="3">
             <br /><iframe id="block'._($i).'" style="display: none" src="" width="98%" height="500" name="'._("Dienste").'" frameborder="0">
             <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen:
             Sie k&ouml;nnen die eingebettete Seite &uuml;ber den folgenden Verweis
@@ -106,8 +110,6 @@ else{
         ';
     };
     echo'
-        <script type="text/javascript">
-        </script>
         </tr></td></table>
     ';
 }
