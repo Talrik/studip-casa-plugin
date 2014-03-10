@@ -487,7 +487,8 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 										WHERE ((
 										`termine`.`range_id` LIKE '$course_id') 
 										AND (`resources_assign`.`assign_user_id` LIKE `termine`.`termin_id`))");
-		$fetchedSearched = $resourceIdSearch->fetch();          
+		$fetchedSearched = $resourceIdSearch->fetch();
+		if($fetchedSearched){          
 		$i = 0;					
 		while ($fetchedSearched){
 			$resource_ids[$i] = $fetchedSearched[0];
@@ -531,6 +532,8 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 			$fetchedSearched = $nameSearch->fetch();          
 		}								
 		return $names;
+		}
+		return array();
 	}
 }
 ?>
