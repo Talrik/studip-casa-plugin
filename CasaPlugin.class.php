@@ -487,50 +487,53 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 										WHERE ((
 										`termine`.`range_id` LIKE '$course_id') 
 										AND (`resources_assign`.`assign_user_id` LIKE `termine`.`termin_id`))");
-		$fetchedSearched = $resourceIdSearch->fetch();          
-		$i = 0;					
-		while ($fetchedSearched){
-			$resource_ids[$i] = $fetchedSearched[0];
-			$i++;
-            $fetchedSearched = $resourceIdSearch->fetch();           
-		}
-		// create request string for parentID search
-		foreach ($resource_ids as $val) {
-			$resourceParts[] = "'%".$val."%'";
-		}
-		$resourceString = implode(' OR `resource_id` LIKE ', $resourceParts);
-		// search for parentIDs
-        $parentIdSearch = $db->query(	"SELECT DISTINCT `parent_id`
+		$fetchedSearched = $resourceIdSearch->fetch();  
+		if($fetchedSearched){
+			$i = 0;					
+			while ($fetchedSearched){
+				$resource_ids[$i] = $fetchedSearched[0];
+				$i++;
+            	$fetchedSearched = $resourceIdSearch->fetch();           
+			}
+			// create request string for parentID search
+			foreach ($resource_ids as $val) {
+				$resourceParts[] = "'%".$val."%'";
+			}
+			$resourceString = implode(' OR `resource_id` LIKE ', $resourceParts);
+			// search for parentIDs
+        	$parentIdSearch = $db->query(	"SELECT DISTINCT `parent_id`
 										FROM `resources_objects`
 										WHERE (
 										`resource_id` LIKE {$resourceString})");
-		$fetchedSearched = $parentIdSearch->fetch();         
-		$i = 0;					
-		while ($fetchedSearched){
-			$parent_ids[$i] = $fetchedSearched[0];
-			$i++;
-			$fetchedSearched = $parentIdSearch->fetch();          
-		}
+			$fetchedSearched = $parentIdSearch->fetch();         
+			$i = 0;					
+			while ($fetchedSearched){
+				$parent_ids[$i] = $fetchedSearched[0];
+				$i++;
+				$fetchedSearched = $parentIdSearch->fetch();          
+			}
 		
-		$ids = array_merge($parent_ids, $resource_ids);
-		// create request dtring with all related reseourceIDs (rooms + buildings)
-		foreach ($ids as $val) {
-			$nameParts[] = "'%".$val."%'";
-		}
-		$namesString = implode(' OR `resource_id` LIKE ', $nameParts);
-		// search for names
-        $nameSearch = $db->query(	"SELECT DISTINCT `name`
+			$ids = array_merge($parent_ids, $resource_ids);
+			// create request dtring with all related reseourceIDs (rooms + buildings)
+			foreach ($ids as $val) {
+				$nameParts[] = "'%".$val."%'";
+			}
+			$namesString = implode(' OR `resource_id` LIKE ', $nameParts);
+			// search for names
+        	$nameSearch = $db->query(	"SELECT DISTINCT `name`
 										FROM `resources_objects`
 										WHERE (
 										`resource_id` LIKE {$namesString})");
-		$fetchedSearched = $nameSearch->fetch();          
-		$i = 0;					
-		while ($fetchedSearched){
-			$names[$i] = $fetchedSearched[0];
-			$i++;
 			$fetchedSearched = $nameSearch->fetch();          
-		}								
+			$i = 0;					
+			while ($fetchedSearched){
+				$names[$i] = $fetchedSearched[0];
+				$i++;
+				$fetchedSearched = $nameSearch->fetch();          
+			}								
 		return $names;
+		}
+		return array();
 	}
 }
 ?>
