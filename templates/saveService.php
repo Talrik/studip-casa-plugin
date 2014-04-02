@@ -103,9 +103,9 @@ else{
 		$statement->execute(array($service_name, $service_description, $service_address, $service_restrictions, utf8_decode($location), $lecture_id, $service->serviceID, $username));
 // if the service has been added show a message box	
 	echo MessageBox::success('Dienst erfolgreich eingetragen', 
-	array('Dienstname: ' . $service_name,
-	'URL: '.$service_address, 
-	'Beschreibung: '.$service_description,
+		array('Dienstname: ' . $service_name,
+		'URL: '.$service_address, 
+		'Beschreibung: '.$service_description,
 		), true);
 if ($location != NULL) {		
 	log_event("CASA_LOCATION_SERVICE_CREATED",$service->serviceID,utf8_decode($location),$service_name.', 		'.$service_description.', '.$username.', '.$service_restrictions.', '.$service_address.', 			'.$serviceID.', 	'.$lecture_id.', '.utf8_decode($location));

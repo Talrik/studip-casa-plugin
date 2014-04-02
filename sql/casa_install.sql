@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `casa_services` (
   `location` varchar(255) DEFAULT NULL,
   `lecture` varchar(64) DEFAULT NULL,
   `serviceID` varchar(64) NOT NULL,
+  `properties` text,
   `createdBy` varchar(64) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` DATETIME NOT NULL,

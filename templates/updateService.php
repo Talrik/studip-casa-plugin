@@ -116,7 +116,7 @@ $newService = Service::createFromValues($title,
 										$url,
 										$serviceID,
 										$oldService->lecture,
-										$newLocation);
+										$newLocation);										
 return $newService;									
 }
 // if casa server is used first update the service on the server

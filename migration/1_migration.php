@@ -36,7 +36,7 @@
  * 
  * @author  Philipp Lehsten <philipp.lehsten@uni-rostock.de>
  */	
-class CreateDatabase extends DBMigration
+class CreateDummyService extends DBMigration
 {
 
 	/**
@@ -44,35 +44,22 @@ class CreateDatabase extends DBMigration
 	 */	
     function description ()
     {
-        return 'Creates neccessary tables for CASA plugin';
+        return 'Creates a dummy service';
     }
 
 	/**
-	 * creates the table 
+	 * enters the dummy values 
 	 */	
-    function up ()
-    {
-        DBManager::get()->exec("CREATE TABLE IF NOT EXISTS `casa_services` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(64) NOT NULL,
-  `description` text,
-  `url` varchar(255) NOT NULL,
-  `userrole` varchar(64) NOT NULL,
-  `location` varchar(255) DEFAULT NULL,
-  `lecture` varchar(64) DEFAULT NULL,
-  `serviceXML` text NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified` DATETIME NOT NULL,
-  PRIMARY KEY (`id`)
-)");
+	
+    function up () { 
+        $this->db->query("INSERT INTO casa_services VALUES (42, 'DummyService', 'Dummy Beschreibung', 'http://www.dummy.de','dozent','Hörsaal','Dummy Veranstaltung')"); 
     }
-
-
+	
 	/**
-	 * drops the table 
+	 * drops the dummy 
 	 */	
     function down ()
     {
-        DBManager::get()->exec("DROP TABLE IF EXISTS `casa_services`");
+        $this->db->query("DELETE FROM casa_services WHERE id = 42");
     }
 }
