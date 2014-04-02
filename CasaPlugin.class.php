@@ -452,7 +452,7 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 				$query = "SELECT *
 					FROM `casa_services`
 					WHERE (`lecture` = :lecture {$locationString}) AND (
-							`userrole` LIKE {$partsString})";
+							`userrole` LIKE {$partsString} OR `createdBy` = '{$this->user->username}')";
 				$statement = DBManager::get()->prepare($query);
 				$statement->bindValue(':lecture', $uniqueSemId);
 				// get query results
