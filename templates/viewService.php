@@ -68,8 +68,6 @@ else{
                 elem.style.display = "block";
                 elem.src = links[control]["URL"];
               	$.post( "'.PluginEngine::getURL('CasaPlugin').'", { request: "viewService", ID: links[control]["ID"] } );
-				alert(elem.src);
-				parent.frames["block"+control].window.location.reload();
 				}
             else{
                 elem.style.display = "none";
