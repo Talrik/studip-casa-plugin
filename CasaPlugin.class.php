@@ -51,6 +51,8 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 			exit();
 		}
 		
+		if($GLOBALS['SessSemName']['class'] == 'sem'){
+			
 		parent::__construct();
 
 
@@ -64,6 +66,7 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 		
 		# get the settings for the plugin
 		global $perm;
+		
 		$sem = Seminar::GetInstance($GLOBALS['SessSemName'][1]);
 		$sem_id = $sem->id;                               
 		$settings = CasaSettings::getCasaSettings();
@@ -71,7 +74,7 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 		# if the user has the role to add services add the tab 
 		if ($perm->have_studip_perm($settings['addRole'], $sem_id)) {	
 			$subNavigation2 = new PluginNavigation();
-			$subNavigation2->setDisplayname("Dienste hinzufügen");
+			$subNavigation2->setDisplayname("Dienste eintragen");
 			$subNavigation2->setLinkParam('viewAddService');
 			$navigation->addSubMenu($subNavigation2);
 		}
@@ -91,6 +94,7 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 		$navigation->addSubMenu($subNavigation4);
 
 		$this->setNavigation($navigation);
+	}
 
     }
 	
@@ -99,6 +103,7 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
      *
      * @param string $course_id ID einer Veranstaltung
      * @param int $last_visit Letzter Besuch eins nutzers, Unix-Zeitstempel
+	 * @param string $user_id
      * @return
      *
      * @author Philipp Lehsten nach einer Vorlage von Bernhard Strehl
@@ -118,18 +123,18 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
 			$icon_text = $icon_text.' und ';
 		}		
 		if($is_new_to_user){
-			$icon_text = $icon_text.' wurden hinzugefügt';
+			$icon_text = $icon_text.' wurden eingetragen';
 		}
 
         $top_nav = new Navigation($name);
 
-        if ((isset($is_new_to_user) && isset($is_modified_to_user)) && ($is_new_to_user || $is_modified_to_user))
-            $top_nav->setImage('/../'.$this->getPluginPath().'/images/casa_16_red.png',
-    array('title' => $icon_text));
-        else
-            $top_nav->setImage('/../'.$this->getPluginPath().'/images/casa_16_sw.png',
-    array('title' => $icon_text));
-
+        if ((isset($is_new_to_user) && isset($is_modified_to_user)) && ($is_new_to_user || $is_modified_to_user)){
+        $top_nav->setImage('/../'.$this->getPluginPath().'PhilippLehsten/CasaPlugin/images/casa_16_red.png',
+	    array('title' => $icon_text));
+		}
+        else{$top_nav->setImage('/../'.$this->getPluginPath().'PhilippLehsten/CasaPlugin/images/casa_16_sw.png',
+		array('title' => $icon_text));
+		}
         $top_nav->setURL(PluginEngine::getLink($this, null, 'viewServices'));
         return $top_nav;
     }
