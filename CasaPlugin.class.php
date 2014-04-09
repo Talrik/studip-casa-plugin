@@ -114,7 +114,9 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
         $semid = $course_id;
         $db = DBManager::get();
 		$icon_text = 'Dienste';
-        $is_modified_to_user = $db->query('select (UNIX_TIMESTAMP(modified) - ' . $last_visit . ') >=0 from  casa_services where lecture="' . $semid . '"')->fetchColumn();
+		((strpos($this->getPluginPath(),'PhilippLehsten')) ? $icon_location = '/../'.$this->getPluginPath().'/images/' : 
+		$icon_location = '/../'.$this->getPluginPath().'PhilippLehsten/CasaPlugin/images/');
+		$is_modified_to_user = $db->query('select (UNIX_TIMESTAMP(modified) - ' . $last_visit . ') >=0 from  casa_services where lecture="' . $semid . '"')->fetchColumn();
 		if($is_modified_to_user){
 			$icon_text = $icon_text.' wurden bearbeitet';
 		}
@@ -129,10 +131,10 @@ class CasaPlugin extends AbstractStudIPStandardPlugin
         $top_nav = new Navigation($name);
 
         if ((isset($is_new_to_user) && isset($is_modified_to_user)) && ($is_new_to_user || $is_modified_to_user)){
-        $top_nav->setImage('/../'.$this->getPluginPath().'PhilippLehsten/CasaPlugin/images/casa_16_red.png',
+        $top_nav->setImage($icon_location.'casa_16_red.png',
 	    array('title' => $icon_text));
 		}
-        else{$top_nav->setImage('/../'.$this->getPluginPath().'PhilippLehsten/CasaPlugin/images/casa_16_sw.png',
+        else{$top_nav->setImage($icon_location.'casa_16_sw.png',
 		array('title' => $icon_text));
 		}
         $top_nav->setURL(PluginEngine::getLink($this, null, 'viewServices'));
